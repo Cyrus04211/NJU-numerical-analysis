@@ -1,0 +1,369 @@
+\documentclass[UTF8,ctexart,a4paper,11pt,openany]{article}
+\usepackage[slantfont,boldfont]{xeCJK}
+\usepackage{fontspec}
+\usepackage{ctex}
+
+\setCJKmainfont{SimSun}%[BoldFont=SimHei] %去掉注释：bf字体为黑体
+
+\setsansfont{SimHei}
+\setCJKsansfont{SimHei}
+
+\xeCJKsetcharclass{"2160}{"2470}{1}% 1: CJK
+\xeCJKsetup{AutoFallBack=true}
+\setCJKfallbackfamilyfont{\CJKrmdefault}{SimSun.ttf}
+
+%\setmainfont{Times New Roman}     %去掉注释：Times new roman字体
+%\usepackage{mathptmx}             %去掉注释：Times new roman字体
+
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst} %段首空两格
+
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{latexsym}
+\usepackage{fancyhdr}
+\usepackage{epstopdf}
+%\usepackage{pifont}
+%\usepackage[perpage,symbol*]{footmisc}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{url}
+\usepackage{exscale}
+\usepackage{ulem}
+\usepackage{relsize}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usepackage{framed}
+\usepackage{bm}
+%\usepackage{pstricks,pst-node,multido,ifthen,calc}
+\usepackage[all]{xy}
+\usepackage{extarrows}
+%\usepackage[backref]{hyperref}
+\usepackage{hyperref}
+\usepackage{stfloats} %插图的时候不分页
+
+\setlength{\parindent}{2em} %段首空两格
+\linespread{1.2}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{mdframed}
+\usepackage{extarrows}
+\usepackage{diagbox}
+\usepackage{makecell}
+
+\theoremstyle{definition}
+\mdfdefinestyle{theoremstyle}{%
+linecolor=green!40,linewidth=.5pt,%
+backgroundcolor=green!10,
+skipabove=8pt,
+skipbelow=5pt,
+innerleftmargin=7pt,
+innerrightmargin=7pt,
+frametitlerule=true,%
+frametitlerulewidth=.5pt,
+frametitlebackgroundcolor=green!35,
+frametitleaboveskip=0pt,
+frametitlebelowskip=0pt,
+innertopmargin=.4\baselineskip,
+innerbottommargin=.4\baselineskip,
+shadow=true,shadowsize=3pt,shadowcolor=black!20,
+%theoremseparator={\hspace{1pt}},
+theoremseparator={.},
+nobreak=true,
+}
+
+
+\everymath{\displaystyle}
+
+\newtheorem{definition}{\hspace{2em}定义}[section]
+\newtheorem{axiom}{\hspace{2em}公理}
+
+\mdtheorem[style=theoremstyle]{theorem}{定理}
+\mdtheorem[style=theoremstyle]{example}{例}
+\mdtheorem[style=theoremstyle]{exercise}{问题}
+\newtheorem{lemma}[theorem]{\hspace{2em}引理}
+\newtheorem{corollary}[theorem]{\hspace{2em}推论}
+
+\newcommand*{\QED}{\hfill\ensuremath{\square}}
+\newcommand*{\rmk}{\textbf{注：}}
+\renewcommand*{\proof}{\textbf{证明：}}
+\newcommand*{\tips}{\textbf{提示：}}
+\newcommand*{\hard}{\textbf{\color{red}(难)}}
+\newcommand*{\eqsmall}{\setlength\abovedisplayskip{1pt}\setlength\belowdisplayskip{1pt}}
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+% \title{数值分析上机报告（示例}
+% \author{Fiddie}
+\pagestyle{fancy}
+\fancyfoot[C]{}
+\fancyhead[RO]{ \thepage}
+\fancyhead[LE]{\thepage  }
+% \fancyhead[RE]{\rightmark (By Fiddie)}
+% \fancyhead[LO]{\leftmark (By Fiddie)}
+\titleformat{\chapter}{\centering\huge\bfseries}{第\,\thechapter\,章}{1em}{} %更改标题样式
+\titleformat{\section}{\bfseries\Large}{$\S$\,\thesection\,}{1em}{} %更改标题样式
+\titlespacing*{\chapter}{0pt}{9pt}{0pt} %调整标题间距
+\setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=0pt} %设置enumerate行间距
+\setenumerate[2]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=0pt} %设置enumerate行间距
+\setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=0pt} % 设置itemize行间距
+\setlist[enumerate,2]{label=(\arabic*),topsep=0mm,itemsep=0mm,partopsep=0mm,parsep=\parskip}
+    % 设置二层枚举为(1)样式
+    
+\newfontfamily\hei{SimHei}
+\newcommand\textcf[1]{\textbf{\textsf{\hei{#1}}}}
+
+\newcommand\e{\leftarrow}
+%\renewcommand{\bibname}{参考文献}
+
+\begin{document}
+\begin{center}
+{\huge \textbf{数值分析第4次上机作业}}
+
+{\large 学号：221840189，姓名：王晨光}
+\end{center}
+
+\section{问题一}
+    \subsection{问题}
+    实现高斯消去法，了解高斯列选主元消去法（课本第三章）.
+    \subsection{算法思路}
+    对于三角方程组$Ax=b$，其中$A\in \mathbb{R}^{n\times n}$为上三角矩阵, $x,b\in \mathbb{R}^{n}$. 若$|A|\neq 0$, 即$a_{ii}\neq 0,1\leqslant i\leqslant n$, 通过回代的方式，容易得到方程组有唯一解$$\left\{\begin{array}{l}x_{n}=\frac{b_{n}}{a_{n n}} \\ x_{i}=\left(b_{i}-\sum_{j=i+1}^{n} a_{i j} x_{j}\right) / a_{i i} \quad, i=n-1, n-2, \dots, 1\end{array}\right.$$以下是实现列主元高斯消去法的基本步骤：\\
+    1. 构建增广矩阵：将线性方程组的系数矩阵和常数向量合并成一个增广矩阵. \\
+    2. 选取列主元：在每一次消元操作中，选择当前列中绝对值最大的元素作为主元. \\
+    3. 行交换：将含有主元的行与当前操作行交换，确保主元位于当前操作行的第一个位置. \\
+    4. 消元计算：通过对当前操作行进行线性组合，将当前列下方的所有元素消为零. \\
+    5. 重复步骤2-4，直到得到上三角矩阵形式. \\
+    6. 回代求解：从最后一行开始，通过回代计算出未知数的值.
+    \begin{algorithm}[H]
+        \caption{高斯消去法}
+        \begin{algorithmic}[1] %每行显示行号
+            \Require 系数矩阵$A=(a_{ij}),i,j=1,2,\dots,n$, 值向量$b=(b_i),i=1,2,\dots,n$
+            \Ensure 方程组无法求解或结果向量$x=(x_i)(i=1,2,\dots,n)$
+            \Function {Gaussian elimination}{$A,b$}
+                \For {$k$ from 1 to $n-1$}
+                    \If {$a_{kk}=0$}
+                        \State 输出“方程组无法求解：算法终止”
+                    \EndIf 
+                    \For {$i$ from $k+1$ to $n$}
+                        \State $l_{ik}\e \frac{a_{ik}}{a_{kk}}$
+                        \State $a_{ik}\e l_{ik}$
+                        \State $b_i\e b_i-l_{ik}b_k$
+                        \For {$j$ from $k+1$ to $n$}
+                            \State $a_{ij}\e a_{ij}-l_{ik}a_{kj}$
+                        \EndFor
+                    \EndFor 
+                \EndFor 
+                \If {$a_{nn}=0$}
+                    \State 输出“方程组无法求解：算法终止”
+                \Else 
+                    \State $x_n\e \frac{b_n}{a_{nn}}$
+                    \State $b_n\e x_n$
+                    \For {$i$ from $n-1$ to 1}
+                        \State $x_i\e \frac{b_i-\sum_{j=i+1}^{n}a_{ij}x_j}{a_{ii}}$
+                        \State $b_i\e x_i$
+                    \EndFor
+                \EndIf
+                \State \Return $x=(x_i),i=1,2,\dots,n$
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+    \subsection{结果分析}%重点（误差图、结果图、分析算法的收敛性（速度）、内存使用（时间、空间）、计算量、稳定性
+    通过Python编程实现高斯消去法的完整过程，完整代码可见附录. \par
+    考虑求解实际问题：求解线性方程组$Ax=b$, 其中$A=\left(\begin{array}{ccc}2 & 1 & -1 \\ -3 & -1 & 2 \\ -2 & 1 & 2 \end{array}\right)$, $b=\left(\begin{array}{ccc}8 \\ -11 \\ -3\end{array}\right)$. 通过该程序解得$x=\left(\begin{array}{ccc}2 \\ 3 \\ -1\end{array}\right)$，经检验，结果正确无误.
+    
+\section{问题二} 
+    \subsection{问题}
+    了解矩阵的LU分解.
+    \subsection{算法思路}
+    矩阵的LU分解是指矩阵$A=LU$的分解形式，其中$L$是单位下三角矩阵，$U$是上三角矩阵. LU分解可以通过Gauss消去法实现. 思路如下：\par
+    若想将给定矩阵$A$分解为下三角矩阵$L$和上三角矩阵$U$，一个思路就是通过一系列的初等变换将$A$化为上三角矩阵，且保证这些变换的乘积是一个下三角，比如通过初等变换$L_{n}L_{n-1}\dots L_1A=U$，则$A=L_1^{-1}L_2^{-1}\dots L_{n}^{-1}U=(L_{n}\dots L_2L_1)^{-1}U$，其中$U$是一个上三角矩阵，$(L_{n}L_{n-1}\dots L_1)^{-1}$是一个下三角矩阵。所以问题就转化为找满足条件的下三角矩阵，对于任意给定的向量$x\in \mathbb{R}^n$，找一个简单的下三角矩阵$L_k$使$x$经过这一矩阵的作用之后的第k+1至第n个分量均为0。能够完成这一条件的最简单的下三角矩阵如下：$$L_k=I_n-l_ke_k^T$$其中$$l_k=(0,\dots,0,l_{k+1, k},\dots,l_{n,k})^T$$即
+    $$L_{n}=\left(\begin{array}{cccccc}1 & & & & & 0 \\ & \ddots & & & & \\ & & 1 & & & \\ & & -l_{k+1, k} & \ddots & & \\ & & \vdots & & \ddots & \\ 0 & & -l_{n, k} & & & 1\end{array}\right)$$
+    \indent 对于任意给定的向量$$x=(x_1,\dots,x_n)^T\in \mathbb{R}^n$$则$$L_kx=(x_1,\dots,x_k,x_{k+1}-x_kl_{k+1,k},\dots,x_n-x_kl_{n,k})$$若要使得第k+1至第n个分量均为0，则$$l_{i,k}=\frac{x_i}{x_k},i=k+1,\dots,n$$此时$$L_kx=(x_1,\dots,x_k,0,\dots,0)$$且Gauss变换$L_k$的性质非常好，Gauss变换的逆特别容易求$$(I_n-l_ke_k^T)(I_n+l_ke_k^T)=I_n-l_ke_k^Tl_ke_k^T=I_n$$即$$L_k^{-1}=I_n+l_ke_k^T$$此时$$A=L_{1}^{-1} L_{2}^{-1} \cdots L_{n}^{-1} U=L U$$其中$$\begin{array}{c}L=L_{1}^{-1} L_{2}^{-1} \cdots L_{n}^{-1}=\left(I_n+l_{1} e_{1}^{T}\right)\left(I_n+l_{2} e_{2}^{T}\right) \cdots\left(l_{n-1} e_{n-1}^{T}\right)=I_n+l_{1} e_{1}^{T}+\cdots  +l_{n-1} e_{n-1}^{T}\end{array}$$则$L$具有如下形状$$L=I_n+\left(l_{1}, l_{2}, \ldots, l_{n-1}, 0\right)=\left(\begin{array}{ccccc}1 & & & & \\ l_{21} & 1 & & & \\ l_{31} & l_{32} & 1 & & \\ \vdots & \vdots & \vdots & \ddots & \\ l_{n 1} & l_{n 2} & l_{n 3} & \cdots & 1\end{array}\right)$$所以$L$是一个单位下三角矩阵，矩阵$A$可以分解为单位下三角$L$和上三角矩阵$U$的形式.
+    \subsection{结果分析}
+    举例说明利用Gauss消去法实现$A$的LU分解：$$A=\left(\begin{array}{ccc}1 & 4 & 7 \\ 2 & 5 & 8 \\ 3 & 6 & 10\end{array}\right)=\left(a_{1}, a_{2}, a_{3}\right)$$计算$L_1$，设$$L_{1}=\left(\begin{array}{ccc}1 & 0 & 0 \\ -l_{2,1} & 1 & 0 \\ -l_{3,1} & 0 & 1\end{array}\right)$$则$L_1a_1$的第二个分量和第三个分量为0，即$$\left\{\begin{array}{l}-l_{2,1}+2=0 \Rightarrow l_{2,1}=2 \\ -l_{3,1}+3=0 \Rightarrow l_{3,1}=3\end{array}\right.$$则$L_{1}=\left(\begin{array}{ccc}1 & 0 & 0 \\ -2 & 1 & 0 \\ -3 & 0 & 1\end{array}\right)$. 接下来计算$L_2$，设$$L_{2}=\left(\begin{array}{ccc}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -l_{3,2} & 1\end{array}\right)$$则$L_2b_2$的第三个分量为0，即$$3l_{3,2}-6=0 \Rightarrow l_{3,2}=2$$则$$L_{2}=\left(\begin{array}{ccc}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & -2 & 1\end{array}\right)$$此时$$L_{2}\left(L_{1} A\right)=\left(\begin{array}{ccc}1 & 4 & 7 \\ 0 & -3 & -6 \\ 0 & 0 & 1\end{array}\right)=U$$最后令$L=(L_2L_1)^{-1}$即得$A$的LU分解.
+
+\section{问题三}
+    \subsection{问题}
+    求解三对角线性方程组的追赶法或Thomas算法.
+    \subsection{算法思路}
+    三对角线性方程组是指形如下的线性方程组：$$\left\{\begin{aligned} a_{i} x_{i-1}+b_{i} x_{i}+c_{i} x_{i+1} & =d_{i}, \quad i=1,2, \ldots, n \\ a_1=&c_n=x_{0}=x_{n+1}=0\end{aligned}\right.$$其中$a_i,b_i,c_i,d_i$是已知常数. 以下是三对角线性方程组的矩阵形式：$$\left(\begin{array}{ccccc}b_{1} & c_{1} & & & 0 \\ a_{2} & b_{2} & c_{2} & & \\ & a_{3} & b_{3} & \ddots & \\ & & \ddots & \ddots & c_{n-1} \\ 0 & & & a_{n} & b_{n}\end{array}\right)\left(\begin{array}{c}x_{1} \\ x_{2} \\ x_{3} \\ \vdots \\ x_{n}\end{array}\right)=\left(\begin{array}{c}d_{1} \\ d_{2} \\ d_{3} \\ \vdots \\ d_{n}\end{array}\right)$$做三次样条插值时，我们常需要解三对角矩阵.\par
+    追赶法（或Thomas算法）是一种基于高斯消元法的算法，分为两个阶段：向前消元(forward elimination)和回代(backward substitution). \par
+    1. 向前消元：\\
+    通过高斯消元法，可以变形得到新的线性方程组：$$\left(\begin{array}{ccccc}1 & \lambda_{1} & & & 0 \\ 0 & 1 & \lambda_{2} & & \\ & 0 & 1 & \ddots & \\ & & \ddots & \ddots & \lambda_{n-1} \\ 0 & & & 0 & 1\end{array}\right)\left(\begin{array}{c}x_{1} \\ x_{2} \\ x_{3} \\ \vdots \\ x_{n}\end{array}\right)=\left(\begin{array}{c}\rho_{1} \\ \rho_{2} \\ \rho_{3} \\ \vdots \\ \rho_{n}\end{array}\right)$$其中：$$\left\{\begin{aligned} \lambda_{i}= & \frac{c_i}{b_i-a_i\lambda_{i-1}}, \quad i=2,3,\dots,n \\ \rho_{i}= & \frac{d_i-a_i\rho_{i-1}}{b_i-a_i\lambda_{i-1}}, \quad i=2,3,\dots,n \\ \lambda_{1}= & \frac{c_1}{b_1}, \\ \rho_{1}= & \frac{d_1}{b_1} \end{aligned}\right.$$
+    \indent 2. 回代：\\
+    得到变形后的线性方程组：$$\left\{ \begin{aligned} x_i+\lambda_ix_{i+1}= & \rho_i, \quad i=1,2,\dots,n-1 \\ x_n= & \rho_n\end{aligned}\right.$$将$x_i$逆序求出即可，如下：$$\left\{ \begin{aligned} x_n= & \rho_n, \\ x_i= & \rho_i - \lambda_i x_{i+1}, \quad i=n-1, n-2,\dots,1 \end{aligned}\right.$$\par
+    整理全部步骤，可以得到一般性公式：$x_i=d_i'-c_i'x_{i+1}$，其中：$$c_i'=\left\{ \begin{aligned} \frac{c_i}{b_i} , \quad i=&1 \\ \frac{c_i}{b_i-c_{i-1}'a_i} , \quad &i=2,3,\dots, n-1 \end{aligned}\right.$$ $$d_i'=\left\{ \begin{aligned} \frac{d_i}{b_i}, \quad i=&1 \\ \frac{d_i-d_{i-1}'a_i}{b_i-c_{i-1}'a_i}, \quad & i=2,3,\dots, n\end{aligned}\right.$$
+    \begin{algorithm}[H]
+        \caption{追赶法}
+        \begin{algorithmic}[1] %每行显示行号
+            \Require 方程组的阶数$n$，系数矩阵$A$的元素$\{a_i\},\{b_i\},\{c_i\},i=1,2,\dots,n$, 值向量$d=(d_i),i=1,2,\dots,n$
+            \Ensure 方程组无法求解或结果向量$x=(x_i)(i=1,2,\dots,n)$
+            \Function {Thomas algorithm}{$n,A,b$}
+                \If {$b_1=0$}
+                    \State 输出“方程组无法求解：算法终止”
+                \EndIf
+                \State $p_1\e d_1$
+                \State $q_1\e \frac{c_1}{d_1}$
+                \For {$k$ from 2 to $n-1$}
+                    \State $p_k\e d_k-a_kq_{k-1}$
+                    \If {$p_k=0$}
+                        \State 输出“方程组无法求解：算法终止”
+                    \EndIf 
+                    \State $q_k\e \frac{c_k}{p_k}$
+                \EndFor
+                \State $p_n\e d_n-a_nq_{n-1}$
+                \If {$p_n=0$}
+                    \State 输出“方程组无法求解：算法终止”
+                \EndIf
+                \State $y_1\e \frac{b_1}{p_1}$ 
+                \For {$k$ from 2 to $n$}
+                    \State $y_k\e \frac{b_k-a_ky_{k-1}}{p_k}$                    
+                \EndFor
+                \State $x_n\e y_n$
+                \For {$i$ from $n-1$ to 1}
+                    \State $x_k\e y_k-q_kx_{k+1}$
+                \EndFor 
+                \State \Return $x=(x_i),i=1,2,\dots,n$
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+    \subsection{结果分析}
+    通过Python编程实现追赶法的完整过程，完整代码可见附录. \par
+    考虑求解实际问题：求解线性方程组$Ax=b$, 其中$A=\left(\begin{array}{cccc}2 & 1 & & \\ 1 & 2 & 1 & \\ & 1 & 2 & 1 \\ & & 1 & 2\end{array}\right)$, $b=\left(\begin{array}{cccc}5 \\ 6 \\ 7 \\ 8\end{array}\right)$. 通过该程序解得$x=\left(\begin{array}{cccc}1.6 \\ 1.8 \\ 0.8 \\ 3.6\end{array}\right)$， 经检验，结果正确无误.
+
+\clearpage
+
+\section{附录: 高斯消去法（问题一）程序代码}
+\lstset{
+    numbers=left,
+    language=Python,
+    keywordstyle=\color{blue!100},
+    commentstyle=\color{green!50!blue!50!},
+    frame=shadowbox，%阴影
+    escapeinside=''，%英文分号输入中文
+    xleftmargin=2em，xrightmargin=2em,aboveskip=1em,
+    framexleftmargin=2em,
+    extendedchars=false}
+
+\begin{lstlisting}[aboveskip=0pt]
+import numpy as np
+
+
+def gaussian_elimination(A, b):
+    n = len(A)
+    
+    # 将数组的数据类型转换为float64
+    A = A.astype(np.float64)
+    b = b.astype(np.float64)
+    
+    # 高斯消元
+    for i in range(n - 1):
+        max_idx = i
+    
+        # 选取列主元
+        for j in range(i + 1, n):
+            if abs(A[j][i]) > abs(A[max_idx][i]):
+                max_idx = j
+    
+        # 交换行
+        A[[i, max_idx]] = A[[max_idx, i]]
+        b[[i, max_idx]] = b[[max_idx, i]]
+    
+        for j in range(i + 1, n):
+            # 计算倍数
+            multiplier = A[j][i] / A[i][i]
+    
+            # 更新矩阵
+            A[j][i:] -= multiplier * A[i][i:]
+            b[j] -= multiplier * b[i]
+    
+    # 回代求解
+    x = np.zeros(n)
+    for i in range(n - 1, -1, -1):
+        x[i] = (b[i] - np.dot(A[i][i + 1:], x[i + 1:])) / A[i][i]
+    
+    return x
+
+# 举例
+A=np.array([[2,1,-1],
+            [-3,-1,2],
+            [-2,1,2]])
+b=np.array([8,-11,-3])
+x=gaussian_elimination(A,b)
+print("方程组的解为：", x)        
+\end{lstlisting}
+
+\clearpage
+
+
+
+\section{附录: 追赶法（问题二）程序代码}
+\lstset{
+    numbers=left,
+    language=Python,
+    keywordstyle=\color{blue!100},
+    commentstyle=\color{green!50!blue!50!},
+    frame=shadowbox，%阴影
+    escapeinside=''，%英文分号输入中文
+    xleftmargin=2em，xrightmargin=2em,aboveskip=1em,
+    framexleftmargin=2em,
+    extendedchars=false}
+
+\begin{lstlisting}[aboveskip=0pt]
+def thomas_algorithm(A, b):
+    n = len(b)
+    a = [0] * n
+    c = [0] * n
+    x = [0] * n
+
+    # 从矩阵 A 中提取三对角线系数
+    for i in range(n):
+        x[i] = A[i][i]
+        if i > 0:
+            a[i] = A[i][i - 1]
+        if i < n - 1:
+            c[i] = A[i][i + 1]
+
+    # 第一步: 向前消元
+    c_prime = [0] * n
+    d_prime = [0] * n
+    c_prime[0] = c[0] / x[0]
+    d_prime[0] = b[0] / x[0]
+    for i in range(1, n):
+        m = 1.0 / (x[i] - a[i] * c_prime[i - 1])
+        c_prime[i] = c[i] * m
+        d_prime[i] = (b[i] - a[i] * d_prime[i - 1]) * m
+
+    # 第二步: 回代
+    x[n - 1] = d_prime[n - 1]
+    for i in range(n - 2, -1, -1):
+        x[i] = d_prime[i] - c_prime[i] * x[i + 1]
+
+    return x
+
+# 举例:
+A = [[2, 1, 0, 0], 
+    [1, 2, 1, 0], 
+    [0, 1, 2, 1], 
+    [0, 0, 1, 2]]
+b = [5, 6, 7, 8]
+x = thomas_algorithm(A, b)
+print("方程组的解为：", x)
+
+\end{lstlisting}
+
+\clearpage
+
+\bibliographystyle{unsrt}
+\bibliography{Reference}
+\end{document}
